@@ -1,0 +1,122 @@
+body {
+  background-color: rgb(17, 49, 65);
+  font-family: Montserrat, sans-serif;
+}
+/*Navbar*/
+.navbar {
+  background-color: #c3c4c3;
+}
+
+.title {
+  margin-left: 15px;
+  color: rgb(8, 8, 8);
+}
+
+/*Task list*/
+
+.tasklist {
+  width: 100%;
+  padding: 0.4rem;
+  padding: 1rem 5rem 1rem 5rem;
+}
+
+.bg-green {
+  background-color: rgb(26, 141, 26);
+  color: #fff;
+}
+
+.bg-yellow {
+  background-color: rgb(94, 127, 216);
+  color: #fff;
+}
+
+.bg-red {
+  background-color: rgb(221, 49, 49);
+  color: #fff;
+}
+
+.taskGridCommands {
+  width: 2rem;
+  align-items: center;
+  margin-right: 15px;
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+.stateBorder {
+  border-radius: 10px;
+  padding: 3px 10px 3px 10px;
+  white-space: nowrap;
+}
+
+.gridActionColumn {
+  text-align: center;
+  width: 10rem;
+}
+
+.taskAddButton {
+  float: right;
+  margin-right: 4rem;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.taskOperations {
+  width: 100%;
+}
+
+.progress {
+  height: 2rem !important;
+}
+
+.projectSummary {
+  margin-left: 4rem;
+  white-space: nowrap;
+}
+
+.summaryContent {
+  margin-top: 10px;
+}
+
+.summaryTotalValue {
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.ten {
+  width: 10%;
+}
+
+.twenty {
+  width: 20%;
+}
+
+.thurty {
+  width: 30%;
+}
+
+.fourty {
+  width: 40%;
+}
+
+.fifteen {
+  width: 12%;
+}
+
+.row {
+  flex-wrap: nowrap !important;
+}
+
+.formButtonsContainer {
+  border-top: 1px solid rgb(202, 201, 201);
+}
+
+.formButtons {
+  margin-top: 15px;
+  margin-right: 5px;
+  float: right;
+}
+
+.input .is-invalid {
+  border-color: #dc3545;
+}

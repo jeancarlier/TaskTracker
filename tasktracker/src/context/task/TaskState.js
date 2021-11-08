@@ -1,0 +1,288 @@
+import React, {useReducer} from 'react';
+import TaskContext from './taskContext';
+import TaskReducer from './taskReducer';
+import axios from 'axios';
+
+import {
+  GET_TASKS,
+  SET_LOADING,
+  ADD_TASK,
+  DELETE_TASK,
+  CONCLUDE_TASK,
+  LOAD_SUMMARY,
+  GET_ESTIMATE
+} from '../types';
+
+const TaskState = props => {
+  const initialState = {
+    loading: false,
+    tasks: [],
+    newTask: {
+      id: null,
+      name: '',
+      description: '',
+      startDate: null,
+      estimate: 0,
+      endDate: null
+    },
+    percentageConcluded: 0,
+    totalHours: 0,
+    totalCompletedHours: 0,
+    totalInProcessHours: 0,
+    totalPlannedHours: 0,
+    lastIndex: 0,
+    estimateHours: [],
+  };
+
+  const [state, dispatch] = useReducer(TaskReducer, initialState);
+
+  //Get tasks
+  const getTasks = async () => {
+    setLoading();
+        
+    axios.get('http://localhost:3000/tasks')
+    .then(res => {
+      dispatch({
+        type: GET_TASKS,
+        payload: res.data   
+      });        
+    }).catch((error) => {
+      console.log("Fail to load tasks: "+ error.status + " " +error.statusText);
+      return [];
+    });    
+  }
+
+    //Get estimate hours
+    const getEstimateHours = async () => {
+                      
+      axios.get('http://localhost:3000/hours')
+      .then((res) => {
+        dispatch({
+          type: GET_ESTIMATE,
+          payload: res.data   
+        });        
+      })
+      .catch((error) => {
+        console.log("Fail to get estimate hours");
+        return [];
+      });      
+    }
+  
+
+  //Get Task status
+  const getStatus = function(record){
+
+    if (record.endDate !== null){
+      return {value: 'Completed', colorClass: 'bg-green'};
+    }
+  
+    if (record.startDate === null){
+      return {value: 'Planned', colorClass: 'bg-red'};
+    }
+  
+    return {value: 'In Process', colorClass: 'bg-yellow'};  
+  };
+
+  //Add task
+  const addTask = async () => {
+    setLoading();        
+    
+    if (state.tasks && state.newTask !== {}) {
+      const newArr = [...state.tasks];
+      state.lastIndex += 1;      
+      state.newTask.id = state.lastIndex;
+
+      axios.post('http://localhost:3000/tasks', state.newTask)
+      .then((res) => {
+        state.tasks = newArr.concat(state.newTask);
+  
+        dispatch({
+          type: ADD_TASK,
+          payload: state.tasks
+        });
+      })
+      .catch((error) => {
+        console.log("Fail to add task: "+ error);
+      });
+    }
+  }
+
+  //Check form validity
+  const checkFormValidity = () => {    
+    if (state.newTask.name === '' || state.newTask.description === '' || state.newTask.estimate === 0){      
+
+      var myform = document.getElementById("addTaskForm")[0];
+      if (!myform.checkValidity()) {
+        if (myform.reportValidity) {
+            myform.reportValidity();
+        }
+      }
+
+      let inputComponent = document.getElementById('taskName');
+      if(state.newTask.name === ''){               
+        inputComponent.classList.add('is-invalid');
+      }else{        
+        inputComponent.classList.remove('is-invalid');
+      }
+
+      inputComponent = document.getElementById('taskDescription');
+      if(state.newTask.description === ''){      
+        inputComponent.classList.add('is-invalid');
+      }else{
+        inputComponent.classList.remove('is-invalid');
+      }
+
+      inputComponent = document.getElementById('taskEstimate');
+      if(state.newTask.estimate === 0 ){        
+        inputComponent.classList.add('is-invalid');
+      }else{
+        inputComponent.classList.remove('is-invalid');
+      }
+
+      return false;
+    }
+
+    let inputComponent = document.getElementById('taskName');
+    inputComponent.classList.remove('is-invalid');
+    
+    inputComponent = document.getElementById('taskDescription');
+    inputComponent.classList.remove('is-invalid');
+    
+    inputComponent = document.getElementById('taskEstimate');
+    inputComponent.classList.remove('is-invalid');
+    
+    return true;
+  }
+
+  //Delete task
+  const deleteTask = async (index) => {
+    setLoading();
+    
+    if (state.tasks) {
+
+      axios.delete('http://localhost:3000/tasks/'+index)
+      .then((res) => {
+        let newArr = [...state.tasks];
+        newArr = state.tasks.filter(t => t.id !== index );
+        state.tasks = newArr;
+
+        dispatch({
+          type: DELETE_TASK,
+          payload: state.tasks
+        });    
+      })
+      .catch((error) => {
+        console.log("Fail to delete task: " + error);
+      });
+    }
+  }
+
+  //Conclude task
+  const concludeTask = (index) => {
+    setLoading();
+    
+    if (state.tasks) {
+      let newArr = [...state.tasks];
+      const ind = state.tasks.findIndex(t => t.id === index );
+      newArr[ind].endDate = new Date();
+      
+      axios.put('http://localhost:3000/tasks/'+index, newArr[ind])
+      .then((res) => {
+        state.tasks = newArr;      
+        dispatch({
+          type: CONCLUDE_TASK,
+          payload: state.tasks
+        });    
+      })
+      .catch((error) => {
+        console.log("Fail to complete task: " + error);
+      });
+    }    
+  }
+
+  //Start task
+  const startTask = (index) => {
+    setLoading();
+
+    if (state.tasks) {
+      let newArr = [...state.tasks];
+      const ind = state.tasks.findIndex(t => t.id === index );
+      newArr[ind].startDate = new Date();
+
+      axios.put('http://localhost:3000/tasks/'+index, newArr[ind])
+      .then((res) => {
+        state.tasks = newArr;
+
+        dispatch({
+          type: CONCLUDE_TASK,
+          payload: state.tasks
+        });
+      })
+      .catch((error) => {
+        console.log("Fail to start the task" + error);        
+      })
+    }
+
+    
+  }
+
+  //Load tasks Summary
+  const loadProjectSummary = () => {
+    let summary = {
+      percentageConcluded: 0,
+      totalHours: 0,
+      totalCompletedHours: 0,
+      totalInProcessHours: 0,
+      totalPlannedHours: 0
+    };    
+
+    const sumHours = (tasks) => {
+      return tasks.reduce((n, {estimate}) => n + parseInt(estimate), 0)
+    };
+
+    if (state.tasks && state.tasks.length > 0){         
+      summary.percentageConcluded = Math.round((state.tasks.filter(task => task.endDate !== null).length / state.tasks.length) * 100,2); 
+      summary.totalHours = sumHours(state.tasks);      
+      summary.totalCompletedHours = sumHours(state.tasks.filter(task => task.endDate !== null));
+      summary.totalInProcessHours = sumHours(state.tasks.filter(task => task.endDate === null && task.startDate !== null));
+      summary.totalPlannedHours = sumHours(state.tasks.filter(task => task.endDate === null && task.startDate === null));
+    }
+      
+    dispatch({
+      type: LOAD_SUMMARY,
+      payload: summary
+    });    
+  }
+
+  //Set loading
+  const setLoading = () => dispatch({type: SET_LOADING});
+
+  return <TaskContext.Provider
+    value={{
+      tasks: state.tasks,
+      newTask: state.newTask,
+      loading: state.loading,
+      percentageConcluded: state.percentageConcluded,
+      totalHours: state.totalHours,
+      totalCompletedHours: state.totalCompletedHours,
+      totalInProcessHours: state.totalInProcessHours,
+      totalPlannedHours: state.totalPlannedHours,
+      estimateHours: state.estimateHours,
+      getTasks,
+      getStatus,
+      deleteTask,
+      concludeTask,
+      addTask,
+      startTask,
+      checkFormValidity,
+      loadProjectSummary,
+      getEstimateHours
+    }}
+  >
+    {props.children}
+  </TaskContext.Provider>
+
+};
+
+export default TaskState;
+
