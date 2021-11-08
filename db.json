@@ -1,0 +1,61 @@
+{
+  "tasks": [
+    {
+      "id": 2,
+      "name": "Fix issue on home screen",
+      "description": "Home screen is presenting error when user tries to login with old email address",
+      "startDate": "2021-11-02 10:12:37",
+      "estimate": 1,
+      "endDate": "2021-11-02 12:12:37"
+    },
+    {
+      "id": 3,
+      "name": "Create remove button",
+      "description": "Create remove task button",
+      "startDate": "2021-11-05 10:15:37",
+      "estimate": 2,
+      "endDate": "2021-11-07T19:01:19.583Z"
+    },
+    {
+      "id": 4,
+      "name": "Create loading spinner",
+      "description": "Create loading spinner to wait for loading data",
+      "startDate": null,
+      "estimate": "5",
+      "endDate": null
+    }
+  ],
+  "hours": [
+    "",
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+  ]
+}
