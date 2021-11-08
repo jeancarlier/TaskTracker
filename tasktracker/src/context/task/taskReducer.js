@@ -3,7 +3,7 @@ import {
   SET_LOADING,
   ADD_TASK,
   DELETE_TASK,
-  CONCLUDE_TASK,
+  COMPLETE_TASK,
   LOAD_SUMMARY,
   GET_ESTIMATE
 } from '../types';
@@ -20,7 +20,7 @@ export default (state, action) => {
         }).id, 
         loading: false        
       };            
-    case DELETE_TASK: case CONCLUDE_TASK:       
+    case DELETE_TASK: case COMPLETE_TASK:       
       return {
         ...state,
         tasks: action.payload,
@@ -51,7 +51,7 @@ export default (state, action) => {
     case LOAD_SUMMARY:        
       return {
         ...state,
-        percentageConcluded: action.payload.percentageConcluded,        
+        percentageCompleted: action.payload.percentageCompleted,        
         totalHours: action.payload.totalHours,
         totalCompletedHours: action.payload.totalCompletedHours,
         totalInProcessHours: action.payload.totalInProcessHours,

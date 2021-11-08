@@ -8,7 +8,7 @@ import {
   SET_LOADING,
   ADD_TASK,
   DELETE_TASK,
-  CONCLUDE_TASK,
+  COMPLETE_TASK,
   LOAD_SUMMARY,
   GET_ESTIMATE
 } from '../types';
@@ -25,7 +25,7 @@ const TaskState = props => {
       estimate: 0,
       endDate: null
     },
-    percentageConcluded: 0,
+    percentageCompleted: 0,
     totalHours: 0,
     totalCompletedHours: 0,
     totalInProcessHours: 0,
@@ -55,7 +55,7 @@ const TaskState = props => {
     //Get estimate hours
     const getEstimateHours = async () => {
                       
-      axios.get('http://localhost:3000/hours')
+      axios.get('http://localhost:3000/hours')      
       .then((res) => {
         dispatch({
           type: GET_ESTIMATE,
@@ -177,8 +177,8 @@ const TaskState = props => {
     }
   }
 
-  //Conclude task
-  const concludeTask = (index) => {
+  //Complete task
+  const completeTask = (index) => {
     setLoading();
     
     if (state.tasks) {
@@ -190,7 +190,7 @@ const TaskState = props => {
       .then((res) => {
         state.tasks = newArr;      
         dispatch({
-          type: CONCLUDE_TASK,
+          type: COMPLETE_TASK,
           payload: state.tasks
         });    
       })
@@ -214,7 +214,7 @@ const TaskState = props => {
         state.tasks = newArr;
 
         dispatch({
-          type: CONCLUDE_TASK,
+          type: COMPLETE_TASK,
           payload: state.tasks
         });
       })
@@ -229,7 +229,7 @@ const TaskState = props => {
   //Load tasks Summary
   const loadProjectSummary = () => {
     let summary = {
-      percentageConcluded: 0,
+      percentageCompleted: 0,
       totalHours: 0,
       totalCompletedHours: 0,
       totalInProcessHours: 0,
@@ -241,7 +241,7 @@ const TaskState = props => {
     };
 
     if (state.tasks && state.tasks.length > 0){         
-      summary.percentageConcluded = Math.round((state.tasks.filter(task => task.endDate !== null).length / state.tasks.length) * 100,2); 
+      summary.percentageCompleted = Math.round((state.tasks.filter(task => task.endDate !== null).length / state.tasks.length) * 100,2); 
       summary.totalHours = sumHours(state.tasks);      
       summary.totalCompletedHours = sumHours(state.tasks.filter(task => task.endDate !== null));
       summary.totalInProcessHours = sumHours(state.tasks.filter(task => task.endDate === null && task.startDate !== null));
@@ -262,7 +262,7 @@ const TaskState = props => {
       tasks: state.tasks,
       newTask: state.newTask,
       loading: state.loading,
-      percentageConcluded: state.percentageConcluded,
+      percentageCompleted: state.percentageCompleted,
       totalHours: state.totalHours,
       totalCompletedHours: state.totalCompletedHours,
       totalInProcessHours: state.totalInProcessHours,
@@ -271,7 +271,7 @@ const TaskState = props => {
       getTasks,
       getStatus,
       deleteTask,
-      concludeTask,
+      completeTask,
       addTask,
       startTask,
       checkFormValidity,

@@ -4,7 +4,7 @@ import TaskContext from '../../context/task/taskContext';
 
 const Summary = ({valueMax}) => {
   const taskContext = useContext(TaskContext);
-  const { loadProjectSummary, percentageConcluded, totalHours, totalCompletedHours, totalInProcessHours, totalPlannedHours } = taskContext;
+  const { loadProjectSummary, percentageCompleted, totalHours, totalCompletedHours, totalInProcessHours, totalPlannedHours } = taskContext;
  
   useEffect(() => {        
     loadProjectSummary();
@@ -21,7 +21,7 @@ const Summary = ({valueMax}) => {
           <div className='summaryContent'>
             <span>Project completed percentage: </span>
             <div className='progress'>
-              <div className='progress-bar progress-bar-striped' style={{width: percentageConcluded+'%'}} role='progressbar' aria-valuemin='0' aria-valuemax={valueMax} aria-valuenow={percentageConcluded}>{percentageConcluded+'%'}</div>
+              <div className='progress-bar progress-bar-striped' style={{width: percentageCompleted+'%'}} role='progressbar' aria-valuemin='0' aria-valuemax={valueMax} aria-valuenow={percentageCompleted}>{percentageCompleted+'%'}</div>
             </div>
           </div>
           <div className='summaryContent'>

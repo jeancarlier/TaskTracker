@@ -12,10 +12,10 @@ const CompleteButton = ({index, status}) => {
     setShowConfirmationDialog(show => !show);
   }
 
-  const {concludeTask} = taskContext;
+  const {completeTask} = taskContext;
 
-  const completeTask = () => {
-    concludeTask(index);
+  const completeCurrentTask = () => {
+    completeTask(index);
     showDialog();
   }
 
@@ -26,7 +26,7 @@ const CompleteButton = ({index, status}) => {
           data-toggle="tooltip" data-placement="top" title="Complete task" onClick={showDialog}></img>    
       }
       
-      <ConfirmationDialog showMessage={showConfirmationDialog} title="Warning" message="Do you really want to set this task as completed?" positiveBtn='Yes' negativeBtn='No' positiveResponse={completeTask} negativeResponse={showDialog} />     
+      <ConfirmationDialog showMessage={showConfirmationDialog} title="Warning" message="Do you really want to set this task as completed?" positiveBtn='Yes' negativeBtn='No' positiveResponse={completeCurrentTask} negativeResponse={showDialog} />     
     </>
   );
 };
