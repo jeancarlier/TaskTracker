@@ -1,6 +1,8 @@
-import React, {useReducer} from 'react';
+import React, {useReducer, useContext} from 'react';
 import TaskContext from './taskContext';
 import TaskReducer from './taskReducer';
+import AlertContext from '../alert/alertContext';
+
 import axios from 'axios';
 
 import {
@@ -10,7 +12,8 @@ import {
   DELETE_TASK,
   COMPLETE_TASK,
   LOAD_SUMMARY,
-  GET_ESTIMATE
+  GET_ESTIMATE,
+  SET_ERROR
 } from '../types';
 
 const TaskState = props => {
@@ -34,8 +37,17 @@ const TaskState = props => {
     estimateHours: [],
   };
 
+  const alertContext = useContext(AlertContext);
+  const {openAlert} = alertContext;
+
   const [state, dispatch] = useReducer(TaskReducer, initialState);
 
+  const setAlert = (msg, title, variant) => {    
+    console.log(msg);      
+    openAlert(msg, title, variant);   
+    dispatch({type: SET_ERROR});   
+  }
+ 
   //Get tasks
   const getTasks = async () => {
     setLoading();
@@ -46,8 +58,8 @@ const TaskState = props => {
         type: GET_TASKS,
         payload: res.data   
       });        
-    }).catch((error) => {
-      console.log("Fail to load tasks: "+ error.status + " " +error.statusText);
+    }).catch((error) => {               
+      setAlert('Fail to load tasks' + error, 'System error!', 'danger');         
       return [];
     });    
   }
@@ -62,8 +74,8 @@ const TaskState = props => {
           payload: res.data   
         });        
       })
-      .catch((error) => {
-        console.log("Fail to get estimate hours");
+      .catch((error) => {                
+        setAlert('Fail to load estimate hours: '+ error, 'System error!', 'danger');         
         return [];
       });      
     }
@@ -101,8 +113,8 @@ const TaskState = props => {
           payload: state.tasks
         });
       })
-      .catch((error) => {
-        console.log("Fail to add task: "+ error);
+      .catch((error) => {                  
+        setAlert('Fail to add task: ' + error, 'System error!', 'danger');                 
       });
     }
   }
@@ -171,8 +183,8 @@ const TaskState = props => {
           payload: state.tasks
         });    
       })
-      .catch((error) => {
-        console.log("Fail to delete task: " + error);
+      .catch((error) => {        
+        setAlert('Fail to delete task: ' + error, 'System error!', 'danger');         
       });
     }
   }
@@ -194,8 +206,8 @@ const TaskState = props => {
           payload: state.tasks
         });    
       })
-      .catch((error) => {
-        console.log("Fail to complete task: " + error);
+      .catch((error) => {        
+        setAlert('Fail to complete task: '+ error, 'System error!', 'danger');         
       });
     }    
   }
@@ -219,11 +231,9 @@ const TaskState = props => {
         });
       })
       .catch((error) => {
-        console.log("Fail to start the task" + error);        
+        setAlert('Fail to start task: ' + error, 'System error!', 'danger');         
       })
-    }
-
-    
+    }    
   }
 
   //Load tasks Summary

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext} from "react";
 import TaskContext from '../../context/task/taskContext';
 import Status from "./Status"
 import DeleteButton from "./DeleteButton";
@@ -6,15 +6,8 @@ import CompleteButton from "./CompleteButton";
 import StartButton from './StartButton'
 import { Row, Col } from "react-bootstrap";
 
-
 const TaskGrid = () => {
   const taskContext = useContext(TaskContext);
-    
-  useEffect(() => {     
-    taskContext.getTasks();  
-    taskContext.getEstimateHours();  
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
 
   return (
     <>
@@ -56,6 +49,7 @@ const TaskGrid = () => {
       </table>
     </>
   );
+  
 };
 
 export default TaskGrid;

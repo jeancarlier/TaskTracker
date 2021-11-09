@@ -1,10 +1,11 @@
 import React, { useContext } from 'react'
 import TaskContext from '../../context/task/taskContext';
+import Spinner from '../layout/Spinner';
 
 const AddTaskForm = () => {
   const taskContext = useContext(TaskContext);
 
-  const {newTask, checkFormValidity, estimateHours} = taskContext;
+  const {newTask, checkFormValidity, estimateHours, loading} = taskContext;
   
   const hours = estimateHours;
 
@@ -27,49 +28,53 @@ const AddTaskForm = () => {
     }
   }
 
-  return (    
-    <>
-      <div className='form-group row'>
-        <label htmlFor='taskName' className='col-sm-3 col-form-label'>Task Name: </label>
-        <div className='col-sm-9'>
-          <input 
-            type='text' 
-            id='taskName'
-            name='taskName' 
-            className='form-control'                         
-            onChange={(e) => onChange(e) }
-            required></input>
+  if (loading){
+    return <Spinner/>
+  }else{  
+    return (    
+      <>
+        <div className='form-group row'>
+          <label htmlFor='taskName' className='col-sm-3 col-form-label'>Task Name: </label>
+          <div className='col-sm-9'>
+            <input 
+              type='text' 
+              id='taskName'
+              name='taskName' 
+              className='form-control'                         
+              onChange={(e) => onChange(e) }
+              required></input>
+          </div>
         </div>
-      </div>
-      <div className='form-group row'>
-        <label htmlFor='taskDescription' className='col-sm-3 col-form-label'>Description: </label>
-        <div className='col-sm-9'>
-          <textarea 
-            id='taskDescription' 
-            name='taskDescription'
-            rows='3' 
-            className='form-control'   
-            onChange={(e) => onChange(e) }                           
-            required></textarea>
+        <div className='form-group row'>
+          <label htmlFor='taskDescription' className='col-sm-3 col-form-label'>Description: </label>
+          <div className='col-sm-9'>
+            <textarea 
+              id='taskDescription' 
+              name='taskDescription'
+              rows='3' 
+              className='form-control'   
+              onChange={(e) => onChange(e) }                           
+              required></textarea>
+          </div>
+        </div>     
+        <div className='form-group row'>
+          <label htmlFor='taskEstimate' className='col-sm-3 col-form-label'>Estimate: </label>
+          <div className='col-sm-9'>
+            <select required
+              className="form-control" 
+              id="taskEstimate"
+              name="taskEstimate"                   
+              onChange={(e) => onChange(e) }            
+              >            
+              {hours.map(hour => (
+                <option key={hour} value={hour}>{hour}</option>  
+              ))}            
+            </select>
+          </div>
         </div>
-      </div>     
-      <div className='form-group row'>
-        <label htmlFor='taskEstimate' className='col-sm-3 col-form-label'>Estimate: </label>
-        <div className='col-sm-9'>
-          <select required
-            className="form-control" 
-            id="taskEstimate"
-            name="taskEstimate"                   
-            onChange={(e) => onChange(e) }            
-            >            
-            {hours.map(hour => (
-              <option key={hour} value={hour}>{hour}</option>  
-            ))}            
-          </select>
-        </div>
-      </div>
-    </>
-  );
+      </>
+    );
+  }
 }
 
 export default AddTaskForm;

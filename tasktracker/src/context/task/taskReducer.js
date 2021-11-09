@@ -5,13 +5,14 @@ import {
   DELETE_TASK,
   COMPLETE_TASK,
   LOAD_SUMMARY,
-  GET_ESTIMATE
+  GET_ESTIMATE,
+  SET_ERROR
 } from '../types';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state, action) => {
   switch(action.type){
-    case GET_TASKS:            
+    case GET_TASKS:             
       return {
         ...state,
         tasks: action.payload,
@@ -62,6 +63,11 @@ export default (state, action) => {
         ...state,
         loading: true
       };
+    case SET_ERROR:
+      return{
+        ...state,
+        loading: false
+      }
     default:       
       return state;
   }
