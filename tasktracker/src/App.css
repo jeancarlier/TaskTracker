@@ -1,5 +1,4 @@
 body {
-  background-color: rgb(17, 49, 65);
   font-family: Montserrat, sans-serif;
 }
 /*Navbar*/
@@ -12,22 +11,20 @@ body {
   color: rgb(8, 8, 8);
 }
 
+.logo {
+  margin-left: 1rem;
+}
+
 /*Alert*/
 .alert {
   margin: 10px;
-}
-
-.btn-close {
-  float: right;
-  margin-right: -30px;
 }
 
 /*Task list*/
 
 .tasklist {
   width: 100%;
-  padding: 0.4rem;
-  padding: 1rem 5rem 1rem 5rem;
+  padding: 1rem 4rem 1rem 4rem;
 }
 
 .bg-green {
@@ -129,4 +126,8 @@ body {
 
 .input .is-invalid {
   border-color: #dc3545;
+}
+
+.form-group {
+  margin-bottom: 5px;
 }

@@ -7,7 +7,6 @@ import DialogState from './context/dialog/DialogState';
 import AlertState from './context/alert/AlertState';
 import Alert from './components/alert/Alert'
 
-
 function App() {
   return (
     <AlertState>
